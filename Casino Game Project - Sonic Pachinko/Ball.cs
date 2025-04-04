@@ -14,6 +14,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
         private Rectangle _location;
         private Vector2 _speed;
 
+        //when y = 125 start curved movement
+
         public Ball(Texture2D texture, int x, int y)
         {
             _texture = texture;
