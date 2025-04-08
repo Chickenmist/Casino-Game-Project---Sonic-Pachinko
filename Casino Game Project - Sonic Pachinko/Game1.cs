@@ -60,6 +60,9 @@ namespace Casino_Game_Project___Sonic_Pachinko
             backgroundRect = new Rectangle(0, 0, 800, 985);
 
             roofCurveLeftRect = new Rectangle(-1, 0, 130, 160);
+            roofCurveRightRect = new Rectangle(671, 0, 130, 160);
+            floorCurveLeftRect = new Rectangle(81, 825, 130, 160);
+            floorCurveRightRect = new Rectangle(670, 826, 130, 160);
 
             base.Initialize();
 
@@ -105,6 +108,9 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             _spriteBatch.Draw(wallTexture, wallRect, Color.White);
             _spriteBatch.Draw(curveTexture, roofCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
+            _spriteBatch.Draw(curveTexture, roofCurveRightRect, Color.White);
+            _spriteBatch.Draw(curveTexture, floorCurveRightRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0f);
+            _spriteBatch.Draw(curveTexture, floorCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0f);
             ball.Draw(_spriteBatch);
 
             _spriteBatch.End();
