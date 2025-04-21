@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Casino_Game_Project___Sonic_Pachinko
 {
@@ -38,7 +39,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Rectangle floorCurveLeftRect;
         Rectangle floorCurveRightRect;
 
-        Texture2D bumperTexture;
+        Texture2D bumperTexture; // Needs to be replaced, the right side got cut off slightly
 
         Texture2D tubeTexture;
         Rectangle tubeRect;
@@ -50,6 +51,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Texture2D floorTexture;
         Rectangle floorLeftRect;
         Rectangle floorRightRect;
+
+        List<Rectangle> bumpers;
 
         public Game1()
         {
@@ -67,7 +70,6 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             wallRect = new Rectangle(45, 185, 40, 800);
             
-
             backgroundRect = new Rectangle(0, 0, 800, 985);
 
             roofCurveLeftRect = new Rectangle(-1, 0, 130, 160);
@@ -83,9 +85,58 @@ namespace Casino_Game_Project___Sonic_Pachinko
             slopeLeftRect = new Rectangle(215, 921, 185, 64);
             slopeRightRect = new Rectangle(485, 921, 185, 64);
 
-            base.Initialize();
+            ballRect = new Rectangle(0, 945, 40, 40);
 
-            ball = new Ball(ballTexture, 0, 945);
+            bumpers = new List<Rectangle>();
+            //Row one
+            bumpers.Add(new Rectangle(150, 100, 51, 52));
+            bumpers.Add(new Rectangle(250, 100, 51, 52));
+            bumpers.Add(new Rectangle(350, 100, 51, 52));
+            bumpers.Add(new Rectangle(450, 100, 51, 52));
+            bumpers.Add(new Rectangle(550, 100, 51, 52));
+            bumpers.Add(new Rectangle(650, 100, 51, 52));
+            //
+
+            //Row two
+            bumpers.Add(new Rectangle(90, 250, 51, 52));
+            bumpers.Add(new Rectangle(200, 250, 51, 52));
+            bumpers.Add(new Rectangle(300, 250, 51, 52));
+            bumpers.Add(new Rectangle(400, 250, 51, 52)); // Replace with hole
+            bumpers.Add(new Rectangle(500, 250, 51, 52));
+            bumpers.Add(new Rectangle(600, 250, 51, 52));
+            bumpers.Add(new Rectangle(700, 250, 51, 52));
+            //
+
+            //Row three
+            bumpers.Add(new Rectangle(150, 400, 51, 52));
+            bumpers.Add(new Rectangle(250, 400, 51, 52));
+            bumpers.Add(new Rectangle(350, 400, 51, 52));
+            bumpers.Add(new Rectangle(450, 400, 51, 52));
+            bumpers.Add(new Rectangle(550, 400, 51, 52));
+            bumpers.Add(new Rectangle(650, 400, 51, 52));
+            //
+
+            //Row four
+            bumpers.Add(new Rectangle(90, 550, 51, 52));
+            bumpers.Add(new Rectangle(200, 550, 51, 52)); // Replace with hole
+            bumpers.Add(new Rectangle(300, 550, 51, 52));
+            bumpers.Add(new Rectangle(400, 550, 51, 52));
+            bumpers.Add(new Rectangle(500, 550, 51, 52));
+            bumpers.Add(new Rectangle(600, 550, 51, 52)); // Replace with hole
+            bumpers.Add(new Rectangle(700, 550, 51, 52));
+            //
+
+            //Row five
+            bumpers.Add(new Rectangle(150, 700, 51, 52));
+            bumpers.Add(new Rectangle(250, 700, 51, 52));
+            bumpers.Add(new Rectangle(350, 700, 51, 52));
+            bumpers.Add(new Rectangle(450, 700, 51, 52));
+            bumpers.Add(new Rectangle(550, 700, 51, 52));
+            bumpers.Add(new Rectangle(650, 700, 51, 52));
+            //
+
+
+            base.Initialize();
         }
 
         protected override void LoadContent()
@@ -139,7 +190,10 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(slopeTexture, slopeRightRect, new Rectangle(0, 0, 127, 64), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
             _spriteBatch.Draw(floorTexture, floorLeftRect, Color.White);
             _spriteBatch.Draw(floorTexture, floorRightRect, Color.White);
-            ball.Draw(_spriteBatch);
+            _spriteBatch.Draw(ballTexture, ballRect, Color.White);
+
+            foreach (Rectangle bumper in bumpers)
+                _spriteBatch.Draw(bumperTexture, bumper, Color.White);
 
             _spriteBatch.End();
 
