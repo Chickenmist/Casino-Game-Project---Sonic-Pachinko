@@ -32,6 +32,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Rectangle backgroundRect;
 
         Texture2D curveTexture;
+        Texture2D bottomCurveTexture;
         Rectangle roofCurveLeftRect;
         Rectangle roofCurveRightRect;
         Rectangle floorCurveLeftRect;
@@ -39,6 +40,16 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
         Texture2D bumperTexture;
 
+        Texture2D tubeTexture;
+        Rectangle tubeRect;
+
+        Texture2D slopeTexture;
+        Rectangle slopeRightRect;
+        Rectangle slopeLeftRect;
+
+        Texture2D floorTexture;
+        Rectangle floorLeftRect;
+        Rectangle floorRightRect;
 
         public Game1()
         {
@@ -61,8 +72,16 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             roofCurveLeftRect = new Rectangle(-1, 0, 130, 160);
             roofCurveRightRect = new Rectangle(671, 0, 130, 160);
-            floorCurveLeftRect = new Rectangle(81, 825, 130, 160);
-            floorCurveRightRect = new Rectangle(670, 826, 130, 160);
+            floorCurveLeftRect = new Rectangle(85, 762, 130, 160);
+            floorCurveRightRect = new Rectangle(670, 762, 130, 160);
+
+            floorLeftRect = new Rectangle(85, 922, 130, 64);
+            floorRightRect = new Rectangle(670, 923, 130, 64);
+
+            tubeRect = new Rectangle(400, 982, 84, 63);
+            
+            slopeLeftRect = new Rectangle(215, 921, 185, 64);
+            slopeRightRect = new Rectangle(485, 921, 185, 64);
 
             base.Initialize();
 
@@ -79,7 +98,11 @@ namespace Casino_Game_Project___Sonic_Pachinko
             backgroundTexture = Content.Load<Texture2D>("Casino Night Zone BG3");
             wallTexture = Content.Load<Texture2D>("Casino Night Wall");
             curveTexture = Content.Load<Texture2D>("Casino Night Curve");
+            bottomCurveTexture = Content.Load<Texture2D>("Casino Night Curve Bottom");
             bumperTexture = Content.Load<Texture2D>("Casino Night Bumper");
+            tubeTexture = Content.Load<Texture2D>("Casino Night Tube");
+            slopeTexture = Content.Load<Texture2D>("Casino Night Slope");
+            floorTexture = Content.Load<Texture2D>("Casino Night Floor");
         }
 
         protected override void Update(GameTime gameTime)
@@ -110,7 +133,12 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(curveTexture, roofCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
             _spriteBatch.Draw(curveTexture, roofCurveRightRect, Color.White);
             _spriteBatch.Draw(curveTexture, floorCurveRightRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0f);
-            _spriteBatch.Draw(curveTexture, floorCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0f);
+            _spriteBatch.Draw(bottomCurveTexture, floorCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
+            _spriteBatch.Draw(tubeTexture, tubeRect, Color.White);
+            _spriteBatch.Draw(slopeTexture, slopeLeftRect, Color.White);
+            _spriteBatch.Draw(slopeTexture, slopeRightRect, new Rectangle(0, 0, 127, 64), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
+            _spriteBatch.Draw(floorTexture, floorLeftRect, Color.White);
+            _spriteBatch.Draw(floorTexture, floorRightRect, Color.White);
             ball.Draw(_spriteBatch);
 
             _spriteBatch.End();
