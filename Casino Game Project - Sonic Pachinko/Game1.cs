@@ -39,10 +39,15 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Rectangle floorCurveLeftRect;
         Rectangle floorCurveRightRect;
 
-        Texture2D bumperTexture; // Needs to be replaced, the right side got cut off slightly
+        Texture2D bumperTexture;
 
         Texture2D tubeTexture;
         Rectangle tubeRect;
+
+        Texture2D catcherTexture;
+        Rectangle centreCatcherRect;
+        Rectangle leftCatcherRect;
+        Rectangle rightCatcherRect;
 
         Texture2D slopeTexture;
         Rectangle slopeRightRect;
@@ -87,6 +92,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             ballRect = new Rectangle(0, 945, 40, 40);
 
+            centreCatcherRect = new Rectangle(400, 250, 51, 52);
+
             bumpers = new List<Rectangle>();
             //Row one
             bumpers.Add(new Rectangle(150, 100, 51, 52));
@@ -101,7 +108,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             bumpers.Add(new Rectangle(90, 250, 51, 52));
             bumpers.Add(new Rectangle(200, 250, 51, 52));
             bumpers.Add(new Rectangle(300, 250, 51, 52));
-            bumpers.Add(new Rectangle(400, 250, 51, 52)); // Replace with hole
+            //bumpers.Add(new Rectangle(400, 250, 51, 52)); // Replace with hole
             bumpers.Add(new Rectangle(500, 250, 51, 52));
             bumpers.Add(new Rectangle(600, 250, 51, 52));
             bumpers.Add(new Rectangle(700, 250, 51, 52));
@@ -154,6 +161,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             tubeTexture = Content.Load<Texture2D>("Casino Night Tube");
             slopeTexture = Content.Load<Texture2D>("Casino Night Slope");
             floorTexture = Content.Load<Texture2D>("Casino Night Floor");
+            catcherTexture = Content.Load<Texture2D>("Casino Night Catcher");
         }
 
         protected override void Update(GameTime gameTime)
@@ -191,6 +199,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(floorTexture, floorLeftRect, Color.White);
             _spriteBatch.Draw(floorTexture, floorRightRect, Color.White);
             _spriteBatch.Draw(ballTexture, ballRect, Color.White);
+            _spriteBatch.Draw(catcherTexture, centreCatcherRect, Color.White);
 
             foreach (Rectangle bumper in bumpers)
                 _spriteBatch.Draw(bumperTexture, bumper, Color.White);
