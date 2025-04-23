@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.XInput;
+using System;
 using System.Collections.Generic;
 
 namespace Casino_Game_Project___Sonic_Pachinko
@@ -19,12 +21,21 @@ namespace Casino_Game_Project___Sonic_Pachinko
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        Screen currentScreen;
+
         KeyboardState keyboardState;
         MouseState mouseState;
 
         Ball ball;
         Texture2D ballTexture;
         Rectangle ballRect;
+        Vector2 ballSpeed;
+        bool ballLaunched;
+
+        float acceleration;
+
+        float launchTime;
+        float curveTime = 1;
 
         Rectangle wallRect;
         Texture2D wallTexture;
@@ -58,6 +69,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Rectangle floorRightRect;
 
         List<Rectangle> bumpers;
+        List<Rectangle> leftWallBumpers;
+        List<Rectangle> rightWallBumpers;
 
         public Game1()
         {
@@ -72,6 +85,12 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _graphics.PreferredBackBufferWidth = 800;
             _graphics.PreferredBackBufferHeight = 985;
             _graphics.ApplyChanges();
+
+            currentScreen = Screen.WaitScreen;
+            ballLaunched = false;
+            launchTime = 0;
+
+            acceleration = 20/19;
 
             wallRect = new Rectangle(45, 185, 40, 800);
             
@@ -94,6 +113,12 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             centreCatcherRect = new Rectangle(400, 250, 51, 52);
 
+            leftCatcherRect = new Rectangle(200, 550, 51, 52);
+
+            rightCatcherRect = new Rectangle(600, 550, 51, 52);
+
+            ballSpeed = new Vector2(0, -10);
+
             bumpers = new List<Rectangle>();
             //Row one
             bumpers.Add(new Rectangle(150, 100, 51, 52));
@@ -105,13 +130,10 @@ namespace Casino_Game_Project___Sonic_Pachinko
             //
 
             //Row two
-            bumpers.Add(new Rectangle(90, 250, 51, 52));
             bumpers.Add(new Rectangle(200, 250, 51, 52));
             bumpers.Add(new Rectangle(300, 250, 51, 52));
-            //bumpers.Add(new Rectangle(400, 250, 51, 52)); // Replace with hole
             bumpers.Add(new Rectangle(500, 250, 51, 52));
             bumpers.Add(new Rectangle(600, 250, 51, 52));
-            bumpers.Add(new Rectangle(700, 250, 51, 52));
             //
 
             //Row three
@@ -124,13 +146,9 @@ namespace Casino_Game_Project___Sonic_Pachinko
             //
 
             //Row four
-            bumpers.Add(new Rectangle(90, 550, 51, 52));
-            bumpers.Add(new Rectangle(200, 550, 51, 52)); // Replace with hole
             bumpers.Add(new Rectangle(300, 550, 51, 52));
             bumpers.Add(new Rectangle(400, 550, 51, 52));
             bumpers.Add(new Rectangle(500, 550, 51, 52));
-            bumpers.Add(new Rectangle(600, 550, 51, 52)); // Replace with hole
-            bumpers.Add(new Rectangle(700, 550, 51, 52));
             //
 
             //Row five
@@ -142,6 +160,13 @@ namespace Casino_Game_Project___Sonic_Pachinko
             bumpers.Add(new Rectangle(650, 700, 51, 52));
             //
 
+            leftWallBumpers = new List<Rectangle>();
+            leftWallBumpers.Add(new Rectangle(90, 250, 51, 52));
+            leftWallBumpers.Add(new Rectangle(90, 550, 51, 52));
+
+            rightWallBumpers = new List<Rectangle>();
+            rightWallBumpers.Add(new Rectangle(700, 250, 51, 52));
+            rightWallBumpers.Add(new Rectangle(700, 550, 51, 52));
 
             base.Initialize();
         }
@@ -176,6 +201,44 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             Window.Title = mouseState.Position.ToString();
 
+            if (currentScreen == Screen.WaitScreen)
+            {
+                //Input bets
+
+                currentScreen = Screen.PlayScreen;
+            }
+            else 
+            {
+                if (!ballLaunched)
+                {
+                    if (keyboardState.IsKeyDown(Keys.Space)) // Initiate launch
+                    {
+                        //launchTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        //if (launchTime < 3)
+                        //{
+
+                        //}
+
+                            ballLaunched = true;
+                    }
+                }
+                else
+                {
+                    ballRect.Offset(ballSpeed);
+                    if (ballRect.Intersects(roofCurveLeftRect))
+                    {
+                        curveTime += (float)Math.Pow((float)gameTime.ElapsedGameTime.TotalSeconds, 2);
+                        ballSpeed.X += acceleration * curveTime;
+                        ballSpeed.Y += acceleration * curveTime;
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+
             base.Update(gameTime);
         }
 
@@ -200,8 +263,16 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(floorTexture, floorRightRect, Color.White);
             _spriteBatch.Draw(ballTexture, ballRect, Color.White);
             _spriteBatch.Draw(catcherTexture, centreCatcherRect, Color.White);
+            _spriteBatch.Draw(catcherTexture, leftCatcherRect, Color.White);
+            _spriteBatch.Draw(catcherTexture, rightCatcherRect, Color.White);
 
             foreach (Rectangle bumper in bumpers)
+                _spriteBatch.Draw(bumperTexture, bumper, Color.White);
+
+            foreach (Rectangle bumper in leftWallBumpers)
+                _spriteBatch.Draw(bumperTexture, bumper, Color.White);
+
+            foreach (Rectangle bumper in rightWallBumpers)
                 _spriteBatch.Draw(bumperTexture, bumper, Color.White);
 
             _spriteBatch.End();
