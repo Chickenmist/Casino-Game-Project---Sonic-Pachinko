@@ -32,10 +32,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Vector2 ballSpeed;
         bool ballLaunched;
 
-        float acceleration;
-
         float launchTime;
-        float curveTime = 1;
 
         Rectangle wallRect;
         Texture2D wallTexture;
@@ -46,6 +43,12 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Texture2D curveTexture;
         Texture2D bottomCurveTexture;
         Rectangle roofCurveLeftRect;
+        //Left roof curve movement rectangles
+        Rectangle roofCurveLeftMoveRectOne;
+        Rectangle roofCurveLeftMoveRectTwo;
+        Rectangle roofCurveLeftMoveRectThree;
+        //
+
         Rectangle roofCurveRightRect;
         Rectangle floorCurveLeftRect;
         Rectangle floorCurveRightRect;
@@ -72,6 +75,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
         List<Rectangle> leftWallBumpers;
         List<Rectangle> rightWallBumpers;
 
+        Texture2D boxTexture;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -90,13 +95,18 @@ namespace Casino_Game_Project___Sonic_Pachinko
             ballLaunched = false;
             launchTime = 0;
 
-            acceleration = 20/19;
-
             wallRect = new Rectangle(45, 185, 40, 800);
             
             backgroundRect = new Rectangle(0, 0, 800, 985);
 
             roofCurveLeftRect = new Rectangle(-1, 0, 130, 160);
+
+            //Left roof curve movement rectangles
+            roofCurveLeftMoveRectOne = new Rectangle(0, 107, 5, 5);
+            roofCurveLeftMoveRectTwo = new Rectangle(0, 29, 50, 5);
+            roofCurveLeftMoveRectThree = new Rectangle(0, 0, 106, 5);
+            //
+
             roofCurveRightRect = new Rectangle(671, 0, 130, 160);
             floorCurveLeftRect = new Rectangle(85, 762, 130, 160);
             floorCurveRightRect = new Rectangle(670, 762, 130, 160);
@@ -178,6 +188,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
             // TODO: use this.Content to load your game content here
             ballTexture = Content.Load<Texture2D>("sonicBall");
 
+            boxTexture = Content.Load<Texture2D>("rectangle");
+
             backgroundTexture = Content.Load<Texture2D>("Casino Night Zone BG3");
             wallTexture = Content.Load<Texture2D>("Casino Night Wall");
             curveTexture = Content.Load<Texture2D>("Casino Night Curve");
@@ -228,9 +240,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
                     ballRect.Offset(ballSpeed);
                     if (ballRect.Intersects(roofCurveLeftRect))
                     {
-                        curveTime += (float)Math.Pow((float)gameTime.ElapsedGameTime.TotalSeconds, 2);
-                        ballSpeed.X += acceleration * curveTime;
-                        ballSpeed.Y += acceleration * curveTime;
+
                     }
                     else
                     {
@@ -251,6 +261,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
             
             _spriteBatch.Draw(backgroundTexture, backgroundRect, Color.White);
 
+            
+
             _spriteBatch.Draw(wallTexture, wallRect, Color.White);
             _spriteBatch.Draw(curveTexture, roofCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
             _spriteBatch.Draw(curveTexture, roofCurveRightRect, Color.White);
@@ -265,6 +277,10 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(catcherTexture, centreCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, leftCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, rightCatcherRect, Color.White);
+            
+            _spriteBatch.Draw(boxTexture, roofCurveLeftMoveRectOne, new Color(Color.White, 0.5f));
+            _spriteBatch.Draw(boxTexture, roofCurveLeftMoveRectTwo, new Color(Color.White, 0.5f));
+            _spriteBatch.Draw(boxTexture, roofCurveLeftMoveRectThree, new Color(Color.White, 0.5f));
 
             foreach (Rectangle bumper in bumpers)
                 _spriteBatch.Draw(bumperTexture, bumper, Color.White);

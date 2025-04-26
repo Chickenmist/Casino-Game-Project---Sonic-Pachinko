@@ -157,6 +157,18 @@
 /processorParam:TextureFormat=Color
 /build:Casino Night Zone BG3.png
 
+#begin rectangle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rectangle.png
+
 #begin sonicBall.png
 /importer:TextureImporter
 /processor:TextureProcessor
