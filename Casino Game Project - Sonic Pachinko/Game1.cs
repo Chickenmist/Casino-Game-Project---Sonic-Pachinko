@@ -130,7 +130,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             slopeLeftRect = new Rectangle(215, 921, 185, 64);
             slopeRightRect = new Rectangle(485, 921, 185, 64);
 
-            ballRect = new Rectangle(0, 945, 40, 40);
+            ballRect = new Rectangle(0, 945, 35, 35);
 
             centreCatcherRect = new Rectangle(400, 250, 51, 52);
 
@@ -192,6 +192,12 @@ namespace Casino_Game_Project___Sonic_Pachinko
             rightWallBumpers = new List<Rectangle>();
             rightWallBumpers.Add(new Rectangle(700, 250, 52, 52));
             rightWallBumpers.Add(new Rectangle(700, 550, 52, 52));
+            //
+
+            //Bumper variables
+            regBumperHit = false;
+            leftBumperHit = false;
+            rightBumperHit = false;
             //
 
             base.Initialize();
@@ -269,136 +275,145 @@ namespace Casino_Game_Project___Sonic_Pachinko
                     {
                         if (firstBumper == 1)
                         {
-                            if (ballRect.X >= 150 && ballRect.X <= 202)
+                            if (ballRect.X >= 150 && ballRect.X <= 242)
                             {
                                 ballSpeed = new Vector2(0, 5);
-                                dropSide = new Random().Next(1,3);
                                 dropStarted = true;
                             }
                         }
                         else if (firstBumper == 2)
                         {
-                            if (ballRect.X >= 250 && ballRect.X <= 302)
+                            if (ballRect.X >= 250 && ballRect.X <= 342)
                             {
                                 ballSpeed = new Vector2(0, 5);
-                                dropSide = new Random().Next(1, 3);
                                 dropStarted = true;
                             }
                         }
                         else if (firstBumper == 3)
                         {
-                            if (ballRect.X >= 350 && ballRect.X <= 402)
+                            if (ballRect.X >= 350 && ballRect.X <= 442)
                             {
                                 ballSpeed = new Vector2(0, 5);
-                                dropSide = new Random().Next(1, 3);
                                 dropStarted = true;
                             }
                         }
                         else if (firstBumper == 4)
                         {
-                            if (ballRect.X >= 450 && ballRect.X <= 502)
+                            if (ballRect.X >= 450 && ballRect.X <= 542)
                             {
                                 ballSpeed = new Vector2(0, 5);
-                                dropSide = new Random().Next(1, 3);
                                 dropStarted = true;
                             }
                         }
                         else if (firstBumper == 5)
                         {
-                            if (ballRect.X >= 550 && ballRect.X <= 602)
+                            if (ballRect.X >= 550 && ballRect.X <= 642)
                             {
                                 ballSpeed = new Vector2(0, 5);
-                                dropSide = new Random().Next(1, 3);
                                 dropStarted = true;
                             }
                         }
                         else if (firstBumper == 6)
                         {
-                            if (ballRect.X >= 650 && ballRect.X <= 702)
+                            if (ballRect.X >= 650 && ballRect.X <= 742)
                             {
                                 ballSpeed = new Vector2(0, 5);
-                                dropSide = new Random().Next(1, 3);
                                 dropStarted = true;
                             }
                         }
                     }
                     else
                     {
+                        ballSpeed.Y += 0.5f;
+
                         foreach (Rectangle bumper in bumpers)
                         {
                             if (ballRect.Intersects(bumper))
                             {
-                                regBumperHit = false;
-                                ballSpeed = new Vector2(0, 0);
                                 ballRect.Y = bumper.Top - ballRect.Height - 5;
-                                ballPostionHolder = ballRect.Location;
-                                dropSide = new Random().Next(1, 3);
-                                regBumperHit = true;
+                                ballSpeed.Y = 0;
+
+                                if (!regBumperHit)
+                                {
+                                    ballPostionHolder.X = bumper.X;
+                                    dropSide = new Random().Next(1, 3);
+                                    regBumperHit = true;
+                                }
                             }
                             
                             if (regBumperHit)
                             {
                                 if (dropSide == 1) //Drop to the left
                                 {
-                                    ballSpeed = new Vector2(-5, 0);
-
+                                    ballSpeed.X -= 0.1f;
+                                    
                                     if (ballRect.X >= ballPostionHolder.X - 100 && ballRect.X <= ballPostionHolder.X - 50)
                                     {
-                                        ballSpeed = new Vector2(0, 5);
+                                        ballSpeed.X = 0;
+                                        regBumperHit = false;
                                     }
                                 }
                                 else if (dropSide == 2) //Drop to the right
                                 {
-                                    ballSpeed = new Vector2(5, 0);
+                                    ballSpeed.X += 0.1f;
 
                                     if (ballRect.X <= ballPostionHolder.X + 100 && ballRect.X >= ballPostionHolder.X + 50)
                                     {
-                                        ballSpeed = new Vector2(0, 5);
+                                        ballSpeed.X = 0;
+                                        regBumperHit = false;
                                     }
                                 }
                             }
                         }
 
-                        foreach (Rectangle leftbumper in leftWallBumpers)
+                        foreach (Rectangle leftBumper in leftWallBumpers)
                         {
-                            if (ballRect.Intersects(leftbumper))
+                            if (ballRect.Intersects(leftBumper))
                             {
-                                leftBumperHit = false;
-                                ballSpeed = new Vector2(0, 0);
-                                ballRect.Y = leftbumper.Top - ballRect.Height - 5;
-                                dropSide = 2;
-                                leftBumperHit = true;
+                                ballRect.Y = leftBumper.Top - ballRect.Height - 5;
+                                ballSpeed.Y = 0;
+
+                                if (!leftBumperHit)
+                                {
+                                    ballPostionHolder.X = leftBumper.X;
+                                    leftBumperHit = true;
+                                }
                             }
 
                             if (leftBumperHit)
                             {
-                                ballSpeed = new Vector2(5, 0);
+                                ballSpeed.X += 0.1f;
 
                                 if (ballRect.X <= ballPostionHolder.X + 100 && ballRect.X >= ballPostionHolder.X + 50)
                                 {
-                                    ballSpeed = new Vector2(0, 5);
+                                    ballSpeed.X = 0;
+                                    leftBumperHit = false;
                                 }
                             }
                         }
 
-                        foreach (Rectangle rightbumper in rightWallBumpers)
+                        foreach (Rectangle rightBumper in rightWallBumpers)
                         {
-                            if (ballRect.Intersects(rightbumper))
+                            if (ballRect.Intersects(rightBumper))
                             {
-                                rightBumperHit = false;
-                                ballSpeed = new Vector2(0, 0);
-                                ballRect.Y = rightbumper.Top - ballRect.Height - 5;
-                                dropSide = 1;
-                                rightBumperHit = true;
+                                ballRect.Y = rightBumper.Top - ballRect.Height - 5;
+                                ballSpeed.Y = 0;
+
+                                if (!rightBumperHit)
+                                {
+                                    ballPostionHolder.X = rightBumper.X;
+                                    rightBumperHit = true;
+                                }
                             }
 
                             if (rightBumperHit)
                             {
-                                ballSpeed = new Vector2(-5, 0);
+                                ballSpeed.X -= 0.2f;
 
                                 if (ballRect.X >= ballPostionHolder.X - 100 && ballRect.X <= ballPostionHolder.X - 50)
                                 {
-                                    ballSpeed = new Vector2(0, 5);
+                                    ballSpeed.X = 0;
+                                    rightBumperHit = false;
                                 }
                             }
                         }
