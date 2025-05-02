@@ -130,68 +130,68 @@ namespace Casino_Game_Project___Sonic_Pachinko
             slopeLeftRect = new Rectangle(215, 921, 185, 64);
             slopeRightRect = new Rectangle(485, 921, 185, 64);
 
-            ballRect = new Rectangle(0, 945, 35, 35);
+            ballRect = new Rectangle(0, 945, 30, 30);
 
-            centreCatcherRect = new Rectangle(400, 250, 51, 52);
+            centreCatcherRect = new Rectangle(400, 250, 50, 50);
 
-            leftCatcherRect = new Rectangle(200, 550, 51, 52);
+            leftCatcherRect = new Rectangle(200, 550, 50, 50);
 
-            rightCatcherRect = new Rectangle(600, 550, 51, 52);
+            rightCatcherRect = new Rectangle(600, 550, 50, 50);
 
             ballSpeed = new Vector2(0, -10);
 
             bumpers = new List<Rectangle>();
             
             //Row one
-            bumpers.Add(new Rectangle(150, 100, 52, 52));
-            bumpers.Add(new Rectangle(250, 100, 52, 52));
-            bumpers.Add(new Rectangle(350, 100, 52, 52));
-            bumpers.Add(new Rectangle(450, 100, 52, 52));
-            bumpers.Add(new Rectangle(550, 100, 52, 52));
-            bumpers.Add(new Rectangle(650, 100, 52, 52));
+            bumpers.Add(new Rectangle(150, 100, 50, 50));
+            bumpers.Add(new Rectangle(250, 100, 50, 50));
+            bumpers.Add(new Rectangle(350, 100, 50, 50));
+            bumpers.Add(new Rectangle(450, 100, 50, 50));
+            bumpers.Add(new Rectangle(550, 100, 50, 50));
+            bumpers.Add(new Rectangle(650, 100, 50, 50));
             //
 
             //Row two
-            bumpers.Add(new Rectangle(200, 250, 52, 52));
-            bumpers.Add(new Rectangle(300, 250, 52, 52));
-            bumpers.Add(new Rectangle(500, 250, 52, 52));
-            bumpers.Add(new Rectangle(600, 250, 52, 52));
+            bumpers.Add(new Rectangle(200, 250, 50, 50));
+            bumpers.Add(new Rectangle(300, 250, 50, 50));
+            bumpers.Add(new Rectangle(500, 250, 50, 50));
+            bumpers.Add(new Rectangle(600, 250, 50, 50));
             //
 
             //Row three
-            bumpers.Add(new Rectangle(150, 400, 52, 52));
-            bumpers.Add(new Rectangle(250, 400, 52, 52));
-            bumpers.Add(new Rectangle(350, 400, 52, 52));
-            bumpers.Add(new Rectangle(450, 400, 52, 52));
-            bumpers.Add(new Rectangle(550, 400, 52, 52));
-            bumpers.Add(new Rectangle(650, 400, 52, 52));
+            bumpers.Add(new Rectangle(150, 400, 50, 50));
+            bumpers.Add(new Rectangle(250, 400, 50, 50));
+            bumpers.Add(new Rectangle(350, 400, 50, 50));
+            bumpers.Add(new Rectangle(450, 400, 50, 50));
+            bumpers.Add(new Rectangle(550, 400, 50, 50));
+            bumpers.Add(new Rectangle(650, 400, 50, 50));
             //
 
             //Row four
-            bumpers.Add(new Rectangle(300, 550, 52, 52));
-            bumpers.Add(new Rectangle(400, 550, 52, 52));
-            bumpers.Add(new Rectangle(500, 550, 52, 52));
+            bumpers.Add(new Rectangle(300, 550, 50, 50));
+            bumpers.Add(new Rectangle(400, 550, 50, 50));
+            bumpers.Add(new Rectangle(500, 550, 50, 50));
             //
 
             //Row five
-            bumpers.Add(new Rectangle(150, 700, 52, 52));
-            bumpers.Add(new Rectangle(250, 700, 52, 52));
-            bumpers.Add(new Rectangle(350, 700, 52, 52));
-            bumpers.Add(new Rectangle(450, 700, 52, 52));
-            bumpers.Add(new Rectangle(550, 700, 52, 52));
-            bumpers.Add(new Rectangle(650, 700, 52, 52));
+            bumpers.Add(new Rectangle(150, 700, 50, 50));
+            bumpers.Add(new Rectangle(250, 700, 50, 50));
+            bumpers.Add(new Rectangle(350, 700, 50, 50));
+            bumpers.Add(new Rectangle(450, 700, 50, 50));
+            bumpers.Add(new Rectangle(550, 700, 50, 50));
+            bumpers.Add(new Rectangle(650, 700, 50, 50));
             //
             
             //Left wall bumpers
             leftWallBumpers = new List<Rectangle>();
-            leftWallBumpers.Add(new Rectangle(90, 250, 52, 52));
-            leftWallBumpers.Add(new Rectangle(90, 550, 52, 52));
+            leftWallBumpers.Add(new Rectangle(90, 250, 50, 50));
+            leftWallBumpers.Add(new Rectangle(90, 550, 50, 50));
             //
 
             //Right wall bumpers
             rightWallBumpers = new List<Rectangle>();
-            rightWallBumpers.Add(new Rectangle(700, 250, 52, 52));
-            rightWallBumpers.Add(new Rectangle(700, 550, 52, 52));
+            rightWallBumpers.Add(new Rectangle(700, 250, 50, 50));
+            rightWallBumpers.Add(new Rectangle(700, 550, 50, 50));
             //
 
             //Bumper variables
@@ -248,7 +248,9 @@ namespace Casino_Game_Project___Sonic_Pachinko
                     if (keyboardState.IsKeyDown(Keys.Space)) // Initiate launch
                     {
 
-                        firstBumper = new Random().Next(1, 7);
+                        //firstBumper = new Random().Next(1, 7);
+
+                        firstBumper = 1;
 
                         ballSpeed = new Vector2(0, -10);
 
@@ -275,8 +277,9 @@ namespace Casino_Game_Project___Sonic_Pachinko
                     {
                         if (firstBumper == 1)
                         {
-                            if (ballRect.X >= 150 && ballRect.X <= 242)
+                            if (ballRect.X >= 160)
                             {
+                                ballRect.X = 160;
                                 ballSpeed = new Vector2(0, 5);
                                 dropStarted = true;
                             }
@@ -324,19 +327,20 @@ namespace Casino_Game_Project___Sonic_Pachinko
                     }
                     else
                     {
-                        ballSpeed.Y += 0.5f;
-
+                        ballSpeed.Y += 0.1f;
+                        
                         foreach (Rectangle bumper in bumpers)
                         {
                             if (ballRect.Intersects(bumper))
                             {
-                                ballRect.Y = bumper.Top - ballRect.Height - 5;
-                                ballSpeed.Y = 0;
+                                ballRect.Y = bumper.Y - ballRect.Height - 5;
+                                ballSpeed.Y = -1;
 
                                 if (!regBumperHit)
                                 {
-                                    ballPostionHolder.X = bumper.X;
-                                    dropSide = new Random().Next(1, 3);
+                                    ballPostionHolder = new Point(ballRect.X, ballRect.Y);
+                                    //dropSide = new Random().Next(1, 3);
+                                    dropSide = 2;
                                     regBumperHit = true;
                                 }
                             }
@@ -345,21 +349,27 @@ namespace Casino_Game_Project___Sonic_Pachinko
                             {
                                 if (dropSide == 1) //Drop to the left
                                 {
-                                    ballSpeed.X -= 0.1f;
-                                    
-                                    if (ballRect.X >= ballPostionHolder.X - 100 && ballRect.X <= ballPostionHolder.X - 50)
+                                    //if(ballRect.X >)
+                                    ballSpeed.X -= 0.005f;
+
+                                    if (ballRect.Left <= ballPostionHolder.X - 90)
                                     {
                                         ballSpeed.X = 0;
+                                        ballRect.X = ballPostionHolder.X - 90;
                                         regBumperHit = false;
                                     }
                                 }
                                 else if (dropSide == 2) //Drop to the right
                                 {
-                                    ballSpeed.X += 0.1f;
+                                    if(ballRect.X < ballPostionHolder.X + 50)
+                                    {
+                                        ballSpeed.X += 0.005f;
+                                    }
 
-                                    if (ballRect.X <= ballPostionHolder.X + 100 && ballRect.X >= ballPostionHolder.X + 50)
+                                    if (ballRect.X >= ballPostionHolder.X + 50)
                                     {
                                         ballSpeed.X = 0;
+                                        ballRect.X = ballPostionHolder.X + 50;
                                         regBumperHit = false;
                                     }
                                 }
@@ -371,11 +381,10 @@ namespace Casino_Game_Project___Sonic_Pachinko
                             if (ballRect.Intersects(leftBumper))
                             {
                                 ballRect.Y = leftBumper.Top - ballRect.Height - 5;
-                                ballSpeed.Y = 0;
+                                ballSpeed.Y = -1;
 
                                 if (!leftBumperHit)
                                 {
-                                    ballPostionHolder.X = leftBumper.X;
                                     leftBumperHit = true;
                                 }
                             }
@@ -384,7 +393,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
                             {
                                 ballSpeed.X += 0.1f;
 
-                                if (ballRect.X <= ballPostionHolder.X + 100 && ballRect.X >= ballPostionHolder.X + 50)
+                                if (ballRect.X <= leftBumper.X + 98 && ballRect.X >= leftBumper.X + 52)
                                 {
                                     ballSpeed.X = 0;
                                     leftBumperHit = false;
@@ -397,7 +406,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
                             if (ballRect.Intersects(rightBumper))
                             {
                                 ballRect.Y = rightBumper.Top - ballRect.Height - 5;
-                                ballSpeed.Y = 0;
+                                ballSpeed.Y = -1;
 
                                 if (!rightBumperHit)
                                 {
@@ -408,16 +417,16 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
                             if (rightBumperHit)
                             {
-                                ballSpeed.X -= 0.2f;
+                                ballSpeed.X -= 0.1f;
 
-                                if (ballRect.X >= ballPostionHolder.X - 100 && ballRect.X <= ballPostionHolder.X - 50)
+                                if (ballRect.X >= ballPostionHolder.X - 98 && ballRect.X <= ballPostionHolder.X - 52)
                                 {
                                     ballSpeed.X = 0;
                                     rightBumperHit = false;
                                 }
                             }
                         }
-                       
+
                     }
                 }
             }
@@ -446,7 +455,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(slopeTexture, slopeRightRect, new Rectangle(0, 0, 127, 64), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
             _spriteBatch.Draw(floorTexture, floorLeftRect, Color.White);
             _spriteBatch.Draw(floorTexture, floorRightRect, Color.White);
-            _spriteBatch.Draw(ballTexture, ballRect, Color.White);
+            _spriteBatch.Draw(boxTexture, ballRect, Color.White);
             _spriteBatch.Draw(catcherTexture, centreCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, leftCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, rightCatcherRect, Color.White);
@@ -456,13 +465,13 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(boxTexture, roofCurveLeftMoveRectThree, new Color(Color.White, 0.5f));
 
             foreach (Rectangle bumper in bumpers)
-                _spriteBatch.Draw(bumperTexture, bumper, Color.White);
-
+                _spriteBatch.Draw(boxTexture, bumper, Color.White);
+            
             foreach (Rectangle bumper in leftWallBumpers)
-                _spriteBatch.Draw(bumperTexture, bumper, Color.White);
+                _spriteBatch.Draw(boxTexture, bumper, Color.White);
 
             foreach (Rectangle bumper in rightWallBumpers)
-                _spriteBatch.Draw(bumperTexture, bumper, Color.White);
+                _spriteBatch.Draw(boxTexture, bumper, Color.White);
 
             _spriteBatch.End();
 
