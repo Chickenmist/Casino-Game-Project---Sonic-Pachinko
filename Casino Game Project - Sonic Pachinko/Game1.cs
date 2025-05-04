@@ -44,6 +44,17 @@ namespace Casino_Game_Project___Sonic_Pachinko
         bool leftBumperHit;
         bool rightBumperHit;
 
+        bool fallComplete;
+
+        bool rollStarted;
+
+        bool fromTop;
+        bool fromLeft;
+        bool fromRight;
+        bool hitTube;
+
+        bool reload;
+
         float launchTime;
         bool launchable;
 
@@ -100,13 +111,19 @@ namespace Casino_Game_Project___Sonic_Pachinko
         //Spring
         Texture2D springTexture;
         Rectangle springRect;
-
+        int springCharge;
+        float chargeTimer;
         //
 
-        //Slope
+        //Slopes
         Texture2D slopeTexture;
         Rectangle slopeRightRect;
+        Rectangle slopeRightMoveRectOne; 
+        Rectangle slopeRightMoveRectTwo;
+
         Rectangle slopeLeftRect;
+        Rectangle slopeLeftMoveRectOne;
+        Rectangle slopeLeftMoveRectTwo;
         //
 
         //Floor
@@ -145,9 +162,17 @@ namespace Casino_Game_Project___Sonic_Pachinko
             leftBumperHit = false;
             rightBumperHit = false;
             launchable = false;
+            fallComplete = false;
+            reload = false;
+            fromLeft = false;
+            fromRight = false;
+            hitTube = false;
+            fromTop = true;
+            rollStarted = false;
+
             launchTime = 0;
 
-            wallRect = new Rectangle(45, 185, 40, 800);
+            wallRect = new Rectangle(45, 185, 45, 800);
             
             springRect = new Rectangle(0, 936, 45, 49);
 
@@ -162,20 +187,47 @@ namespace Casino_Game_Project___Sonic_Pachinko
             //
 
             roofCurveRightRect = new Rectangle(671, 0, 130, 160);
-            floorCurveLeftRect = new Rectangle(85, 762, 130, 160);
+
+            floorCurveLeftRect = new Rectangle(90, 762, 130, 160);
+            
+            //Left floor curve movement rectangles
+            floorCurveLeftMoveRectOne = new Rectangle(105, 850, 10, 50);
+            floorCurveLeftMoveRectTwo = new Rectangle(145, 895, 10, 50);
+            floorCurveLeftMoveRectThree = new Rectangle(205, 920, 10, 50);
+            //
+
             floorCurveRightRect = new Rectangle(670, 762, 130, 160);
+
+            //Right floor curve movement rectangles
+            floorCurveRightMoveRectOne = new Rectangle(710, 910, 10, 50);
+            floorCurveRightMoveRectTwo = new Rectangle(670, 920, 10, 50);
+            //
 
             floorLeftRect = new Rectangle(85, 922, 130, 64);
             floorRightRect = new Rectangle(670, 923, 130, 64);
 
             tubeRect = new Rectangle(400, 982, 84, 63);
             
-            slopeLeftRect = new Rectangle(215, 921, 185, 64);
-            slopeRightRect = new Rectangle(485, 921, 185, 64);
-
-            ballRect = new Rectangle(0, 906, 30, 30);
+            //Slopes
+            slopeLeftRect = new Rectangle(215, 920, 185, 65);
             
-            //Catcher
+            //Left slope movement
+            slopeLeftMoveRectOne = new Rectangle(210, 921, 30, 50);
+            slopeLeftMoveRectTwo = new Rectangle(310, 950, 30, 50);
+            //
+
+            slopeRightRect = new Rectangle(485, 920, 185, 65);
+            
+            //Right slope movement
+            slopeRightMoveRectOne = new Rectangle(630, 931, 50, 50);
+            slopeRightMoveRectTwo = new Rectangle(520, 965, 50, 50);
+            //
+
+            //Ball
+            ballRect = new Rectangle(0, 906, 30, 30);
+            //
+
+            //Catchers
             centreCatcherRect = new Rectangle(400, 250, 50, 50);
             leftCatcherRect = new Rectangle(200, 550, 50, 50);
             rightCatcherRect = new Rectangle(600, 550, 50, 50);
@@ -184,6 +236,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             ballSpeed = new Vector2(0, -10);
 
             bumpers = new List<Rectangle>();
+
             
             //Row one
             bumpers.Add(new Rectangle(150, 100, 50, 50));
@@ -277,7 +330,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             // TODO: Add your update logic here
 
-            //Window.Title = mouseState.Position.ToString();
+            Window.Title = mouseState.Position.ToString();
 
             if (currentScreen == Screen.WaitScreen)
             {
@@ -339,38 +392,73 @@ namespace Casino_Game_Project___Sonic_Pachinko
                 {
                     if (!ballLaunched)
                     {
-                        if (keyboardState.IsKeyDown(Keys.Space) && !launchable) //Initiate launch
+                        if(reload)
                         {
-                            launchTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                            if(launchTime >= 1)
+                            ballSpeed.X = 0.5f;
+                            
+                            ballRect.Offset(ballSpeed);
+                            
+                            if (ballRect.X < 0)
                             {
-                                springRect.Y += 3;
+                                ballRect.X += 1;
                             }
-                            else if (launchTime >= 2)
+                            else if (ballRect.X >= 0)
                             {
-                                springRect.Y += 3;
-                            }
-                            else if (launchTime >= 3)
-                            {
-                                springRect.Y += 3;
-                            }
-                            else if (launchTime >= 4)
-                            {
-                                springRect.Y += 3;
-                            }
-                            else if (launchTime >= 5)
-                            {
-                                springRect.Y += 3;
-                                launchable = true;
+                                ballSpeed.X = 0;
+                                ballRect.X = 0;
+                                reload = false;
                             }
                         }
-                        else if (launchable && keyboardState.IsKeyUp(Keys.Space))
+                        else
                         {
-                            firstBumper = new Random().Next(1, 7);
-                            ballSpeed = new Vector2(0, -10);
+                            if (keyboardState.IsKeyDown(Keys.Space) && !launchable) //Initiate launch
+                            {
+                                chargeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                            ballLaunched = true;
+                                if (chargeTimer >= 1)
+                                {
+                                    springCharge++;
+
+                                    if (springCharge == 1)
+                                    {
+                                        springRect.Y += 9;
+                                        ballRect.Y += 9;
+                                    }
+                                    else if (springCharge == 2)
+                                    {
+                                        springRect.Y += 9;
+                                        ballRect.Y += 9;
+                                    }
+                                    else if (springCharge == 3)
+                                    {
+                                        springRect.Y += 9;
+                                        ballRect.Y += 9;
+                                    }
+                                    else if (springCharge == 4)
+                                    {
+                                        springRect.Y += 9;
+                                        ballRect.Y += 9;
+                                        launchable = true;
+                                    }
+
+                                    chargeTimer = 0;
+                                }
+                            }
+                            else if (!launchable && keyboardState.IsKeyUp(Keys.Space))
+                            {
+                                springCharge = 0;
+                                chargeTimer = 0;
+                                springRect.Y = 936;
+                                ballRect.Y = 906;
+                            }
+                            else if (launchable && keyboardState.IsKeyUp(Keys.Space))
+                            {
+                                firstBumper = new Random().Next(1, 7);
+                                springRect.Y = 936;
+                                ballSpeed = new Vector2(0, -10);
+
+                                ballLaunched = true;
+                            }
                         }
                     }
                     else
@@ -450,7 +538,10 @@ namespace Casino_Game_Project___Sonic_Pachinko
                         }
                         else
                         {
-                            ballSpeed.Y += 0.5f;
+                            if (!fallComplete)
+                            {
+                                ballSpeed.Y += 0.5f;
+                            }
 
                             foreach (Rectangle bumper in bumpers)
                             {
@@ -560,50 +651,183 @@ namespace Casino_Game_Project___Sonic_Pachinko
                                 }
                             }
 
-                            if (ballRect.Intersects(floorCurveLeftRect))
+                            //Curve movement
+                            if (ballRect.Intersects(floorCurveLeftMoveRectOne))
                             {
-                                ballSpeed = new Vector2(0, 0);
-                                Window.Title = ballRect.Location.ToString();
+                                ballSpeed = new Vector2(4, 4.5f);
+                            }
+                            else if (ballRect.Intersects(floorCurveLeftMoveRectTwo))
+                            {
+                                if (!rollStarted)
+                                {
+                                    ballRect.Y = floorCurveLeftMoveRectTwo.Top - 30;
+                                }
+
+                                rollStarted = true;
+                                ballSpeed = new Vector2(6, 2.5f);
+                            }
+
+                            if (ballRect.Intersects(floorCurveRightMoveRectOne))
+                            {
+                                if (!rollStarted)
+                                {
+                                    ballRect.Y = floorCurveRightMoveRectOne.Top - 30;
+                                }
+
+                                rollStarted = true;
+                                ballSpeed = new Vector2(-4, 1);
+                            }
+                            else if (ballRect.Intersects(floorCurveLeftMoveRectTwo))
+                            {
+                                if (!rollStarted)
+                                {
+                                    ballRect.Y = floorCurveRightMoveRectTwo.Top - 30;
+                                }
+
+                                rollStarted = true;
+                                ballSpeed = new Vector2(3.7f, 1.3f);
+                            }
+                            //
+
+                            //Slope movement
+                            if (ballRect.Intersects(slopeLeftMoveRectOne))
+                            {
+                                fromLeft = true;
+                                fromTop = false;
+                                
+                                if (!fallComplete)
+                                {
+                                    ballRect.Y = slopeLeftMoveRectOne.Y - 30;
+                                }
+
+                                fallComplete = true;
+                                ballSpeed = new Vector2(3.7f, 1.3f);
+                            }
+
+                            if (ballRect.Intersects(slopeLeftMoveRectTwo))
+                            {
+                                fromLeft = true;
+                                fromTop = false;
+
+                                if (!fallComplete)
+                                {
+                                    ballRect.Y = slopeLeftMoveRectTwo.Y - 30;
+                                }
+
+                                fallComplete = true;
+                                ballSpeed = new Vector2(3.7f, 1.3f);
+                            }
+
+                            if(ballRect.Intersects(slopeRightMoveRectOne))
+                            {
+                                if (!fallComplete)
+                                {
+                                    ballRect.Y = slopeRightMoveRectOne.Y - 30;
+                                }
+
+                                fromRight = true;
+                                fromTop = false;
+
+                                fallComplete = true;
+                                ballSpeed = new Vector2(-3.7f, 1.3f);
+                            }
+
+                            if(ballRect.Intersects(slopeRightMoveRectTwo))
+                            {
+                                fromRight = true;
+                                fromTop = false;
+
+                                if (!fallComplete)
+                                {
+                                    ballRect.Y = slopeRightMoveRectTwo.Y - 30;
+                                }
+
+                                fallComplete = true;
+                                ballSpeed = new Vector2(-3.7f, 1.3f);
+                            }
+                            //
+
+                            if (ballRect.Intersects(centreCatcherRect)) //Ball lands in the centre catcher, 2 chips
+                            {
+                                //if (ballRect.Bottom >= centreCatcherRect.Bottom)
+                                //{
+                                //    dropStarted = false;
+                                //    ballLaunched = false;
+                                //}
+                                
                             }
                             
-                            if (ballRect.Intersects(floorCurveRightRect))
+                            if (ballRect.Intersects(leftCatcherRect)) //Ball lands in the left catcher, 1 chip
                             {
-                                ballSpeed = new Vector2(0, 0);
-                                Window.Title = ballRect.Location.ToString();
+                                if (ballRect.Bottom == leftCatcherRect.Bottom)
+                                {
+                                    ballSpeed = new Vector2(0, 0);
+                                    launchable = false;
+                                    dropStarted = false;
+                                    ballLaunched = false;
+                                }
+                            }
+                            
+                            if (ballRect.Intersects(rightCatcherRect)) //Ball lands in the right catcher, 1 chip
+                            {
+                                if (ballRect.Bottom == rightCatcherRect.Bottom)
+                                {
+                                    ballSpeed = new Vector2(0, 0);
+                                    launchable = false;
+                                    dropStarted = false;
+                                    ballLaunched = false;
+                                }
                             }
 
-                            if (ballRect.Intersects(slopeLeftRect))
+                            if (ballRect.Intersects(tubeRect)) //Ball falls into bottom
                             {
-                                ballSpeed = new Vector2(0, 0);
-                                Window.Title = ballRect.Location.ToString();
+                                if(!hitTube)
+                                {
+                                    if (!fromTop)
+                                    {
+                                        ballSpeed = new Vector2(0, 0);
+                                        hitTube = true;
+                                    }
+                                }
+                                else
+                                {
+                                    if (fromLeft && ballRect.X <= 412)
+                                    {
+                                        ballSpeed.X += 0.5f;
+                                    }
+                                    else if (fromLeft && ballRect.X >= 412)
+                                    {
+                                        ballSpeed.X = 0;
+                                        ballSpeed.Y += 0.5f;
+                                    }
+
+                                    if (fromRight && ballRect.X >= 430)
+                                    {
+                                        ballSpeed.X -= 0.5f;
+                                    }
+                                    else if (fromRight && ballRect.X <= 430)
+                                    {
+                                        ballSpeed.X = 0;
+                                        ballSpeed.Y += 0.5f;
+                                    }
+                                }
                             }
 
-                            if(ballRect.Intersects(slopeRightRect))
+                            if (ballRect.Y > tubeRect.Y) //Reset ball from bottom, Zero Chips
                             {
                                 ballSpeed = new Vector2(0, 0);
-                                Window.Title = ballRect.Location.ToString();
+                                ballRect.Location = new Point(-30, 906);
+                                launchable = false;
+                                dropStarted = false;
+                                ballLaunched = false;
+                                fallComplete = false;
+                                hitTube = false;
+                                fromLeft = false;
+                                fromRight = false;
+                                fromTop = true;
+                                rollStarted = false;
+                                reload = true;
                             }
-
-                            //if (ballRect.Intersects(centreCatcherRect))
-                            //{
-                            //    dropStarted = false;
-                            //    ballLaunched = false;
-                            //}
-                            //else if (ballRect.Intersects(leftCatcherRect))
-                            //{
-                            //    dropStarted = false;
-                            //    ballLaunched = false;
-                            //}
-                            //else if (ballRect.Intersects(rightCatcherRect))
-                            //{
-                            //    dropStarted = false;
-                            //    ballLaunched = false;
-                            //}
-                            //else if (ballRect.Y > tubeRect.Y)
-                            //{
-                            //    dropStarted = false;
-                            //    ballLaunched = false;
-                            //}
                         }
                     }
                 }
@@ -626,31 +850,26 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(backgroundTexture, backgroundRect, Color.White);
 
             _spriteBatch.Draw(wallTexture, wallRect, Color.White);
-            
+
             _spriteBatch.Draw(curveTexture, roofCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
             _spriteBatch.Draw(curveTexture, roofCurveRightRect, Color.White);
             _spriteBatch.Draw(curveTexture, floorCurveRightRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0f);
             _spriteBatch.Draw(bottomCurveTexture, floorCurveLeftRect, new Rectangle(0, 0, 94, 95), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
-           
-            _spriteBatch.Draw(tubeTexture, tubeRect, Color.White);
-            
+
             _spriteBatch.Draw(slopeTexture, slopeLeftRect, Color.White);
             _spriteBatch.Draw(slopeTexture, slopeRightRect, new Rectangle(0, 0, 127, 64), Color.White, 0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0f);
            
             _spriteBatch.Draw(floorTexture, floorLeftRect, Color.White);
             _spriteBatch.Draw(floorTexture, floorRightRect, Color.White);
-            
-            _spriteBatch.Draw(ballTexture, ballRect, Color.White);
 
             _spriteBatch.Draw(springTexture, springRect, Color.White);
+
+            _spriteBatch.Draw(ballTexture, ballRect, Color.White);
             
             _spriteBatch.Draw(catcherTexture, centreCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, leftCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, rightCatcherRect, Color.White);
-            
-            _spriteBatch.Draw(boxTexture, roofCurveLeftMoveRectOne, new Color(Color.White, 0.5f));
-            _spriteBatch.Draw(boxTexture, roofCurveLeftMoveRectTwo, new Color(Color.White, 0.5f));
-            _spriteBatch.Draw(boxTexture, roofCurveLeftMoveRectThree, new Color(Color.White, 0.5f));
+            _spriteBatch.Draw(tubeTexture, tubeRect, Color.White);
 
             foreach (Rectangle bumper in bumpers)
                 _spriteBatch.Draw(bumperTexture, bumper, Color.White);
