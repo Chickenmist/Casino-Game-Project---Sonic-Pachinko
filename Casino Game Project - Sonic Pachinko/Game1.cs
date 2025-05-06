@@ -330,12 +330,14 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             // TODO: Add your update logic here
 
-            Window.Title = mouseState.Position.ToString();
+            Window.Title = "Sonic Pachinko";
 
             if (currentScreen == Screen.WaitScreen)
             {
+                Window.Title = "Sonic Pachinko - Bet to Play";
+
                 //Input bets
-                if(keyboardState.IsKeyDown(Keys.D1) || keyboardState.IsKeyDown(Keys.NumPad1)) //Bet 1
+                if (keyboardState.IsKeyDown(Keys.D1) || keyboardState.IsKeyDown(Keys.NumPad1)) //Bet 1
                 {
                     remainingBalls = 1;
                     currentScreen = Screen.PlayScreen;
@@ -388,6 +390,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
             }
             else 
             {
+                Window.Title = "Sonic Pachinko";
+
                 if (remainingBalls > 0)
                 {
                     if (!ballLaunched)
@@ -406,6 +410,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
                             {
                                 ballSpeed.X = 0;
                                 ballRect.X = 0;
+                                remainingBalls--;
                                 reload = false;
                             }
                         }
@@ -415,7 +420,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
                             {
                                 chargeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                                if (chargeTimer >= 1)
+                                if (chargeTimer >= 0.5)
                                 {
                                     springCharge++;
 
@@ -749,33 +754,60 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
                             if (ballRect.Intersects(centreCatcherRect)) //Ball lands in the centre catcher, 2 chips
                             {
-                                //if (ballRect.Bottom >= centreCatcherRect.Bottom)
-                                //{
-                                //    dropStarted = false;
-                                //    ballLaunched = false;
-                                //}
-                                
+                                if (ballRect.Y > centreCatcherRect.Y)
+                                {
+                                    ballSpeed = new Vector2(0, 0);
+                                    ballRect.Location = new Point(-30, 906);
+                                    launchable = false;
+                                    dropStarted = false;
+                                    ballLaunched = false;
+                                    fallComplete = false;
+                                    hitTube = false;
+                                    fromLeft = false;
+                                    fromRight = false;
+                                    fromTop = true;
+                                    rollStarted = false;
+                                    reload = true;
+                                    remainingBalls--;
+                                }
+
                             }
                             
                             if (ballRect.Intersects(leftCatcherRect)) //Ball lands in the left catcher, 1 chip
                             {
-                                if (ballRect.Bottom == leftCatcherRect.Bottom)
+                                if (ballRect.Y > leftCatcherRect.Y)
                                 {
                                     ballSpeed = new Vector2(0, 0);
+                                    ballRect.Location = new Point(-30, 906);
                                     launchable = false;
                                     dropStarted = false;
                                     ballLaunched = false;
+                                    fallComplete = false;
+                                    hitTube = false;
+                                    fromLeft = false;
+                                    fromRight = false;
+                                    fromTop = true;
+                                    rollStarted = false;
+                                    reload = true;
                                 }
                             }
                             
                             if (ballRect.Intersects(rightCatcherRect)) //Ball lands in the right catcher, 1 chip
                             {
-                                if (ballRect.Bottom == rightCatcherRect.Bottom)
+                                if (ballRect.Y > rightCatcherRect.Y)
                                 {
                                     ballSpeed = new Vector2(0, 0);
+                                    ballRect.Location = new Point(-30, 906);
                                     launchable = false;
                                     dropStarted = false;
                                     ballLaunched = false;
+                                    fallComplete = false;
+                                    hitTube = false;
+                                    fromLeft = false;
+                                    fromRight = false;
+                                    fromTop = true;
+                                    rollStarted = false;
+                                    reload = true;
                                 }
                             }
 
