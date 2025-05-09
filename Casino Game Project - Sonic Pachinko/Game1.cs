@@ -38,6 +38,9 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Point ballPostionHolder;
         bool ballLaunched;
         int remainingBalls;
+        int spriteFrame;
+        float spriteTime;
+        Rectangle frameRect;
         //
 
         bool regBumperHit;
@@ -225,6 +228,10 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             //Ball
             ballRect = new Rectangle(0, 906, 30, 30);
+
+            spriteFrame = 1;
+            spriteTime = 0;
+            frameRect = new Rectangle(0, 0, 27, 30);
             //
 
             //Catchers
@@ -304,7 +311,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            ballTexture = Content.Load<Texture2D>("sonicBall");
+            ballTexture = Content.Load<Texture2D>("Sonic Roll Sprite Sheet");
 
             boxTexture = Content.Load<Texture2D>("rectangle");
 
@@ -869,7 +876,44 @@ namespace Casino_Game_Project___Sonic_Pachinko
                 }
             }
 
+            spriteTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            AnimateFrame();
+
             base.Update(gameTime);
+        }
+
+        private void AnimateFrame()
+        {
+            if(spriteFrame == 1)
+            {
+                frameRect = new Rectangle(0, 0, 27, 30);
+            }
+            else if (spriteFrame == 2)
+            {
+                frameRect = new Rectangle(28, 0, 30, 30);
+            }
+            else if (spriteFrame == 3)
+            {
+                frameRect = new Rectangle(59, 0, 27, 30);
+            }
+            else if (spriteFrame == 4)
+            {
+                frameRect = new Rectangle(87, 0, 30, 30);
+            }
+
+            if (spriteTime >= 0.09)
+            {
+                if (spriteFrame < 4)
+                {
+                    spriteFrame++;
+                }
+                else
+                {
+                    spriteFrame = 1;
+                }
+
+                spriteTime = 0;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -896,7 +940,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             _spriteBatch.Draw(springTexture, springRect, Color.White);
 
-            _spriteBatch.Draw(ballTexture, ballRect, Color.White);
+            _spriteBatch.Draw(ballTexture, ballRect, frameRect, Color.White);
             
             _spriteBatch.Draw(catcherTexture, centreCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, leftCatcherRect, Color.White);

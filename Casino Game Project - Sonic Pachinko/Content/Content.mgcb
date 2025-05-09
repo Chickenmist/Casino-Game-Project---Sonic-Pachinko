@@ -181,6 +181,18 @@
 /processorParam:TextureFormat=Color
 /build:rectangle.png
 
+#begin Sonic Roll Sprite Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sonic Roll Sprite Sheet.png
+
 #begin sonicBall.png
 /importer:TextureImporter
 /processor:TextureProcessor
