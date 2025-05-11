@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Bumper SFX.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Bumper SFX.wav
+
 #begin Casino Night Bottom Curve.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -133,6 +139,12 @@
 /processorParam:TextureFormat=Color
 /build:Casino Night Wall.png
 
+#begin Casino Night Zone - Sonic the Hedgehog 2 [OST].mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Casino Night Zone - Sonic the Hedgehog 2 [OST].mp3
+
 #begin Casino Night Zone BG1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -169,6 +181,24 @@
 /processorParam:TextureFormat=Color
 /build:Casino Night Zone BG3.png
 
+#begin Casino Slot SFX.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Casino Slot SFX.wav
+
+#begin CNZ Pinball Flipper SFX.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:CNZ Pinball Flipper SFX.wav
+
+#begin CNZ Spring Launcher SFX.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:CNZ Spring Launcher SFX.wav
+
 #begin rectangle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -180,6 +210,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:rectangle.png
+
+#begin Score Tally Total SFX.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Score Tally Total SFX.wav
 
 #begin Sonic Roll Sprite Sheet.png
 /importer:TextureImporter

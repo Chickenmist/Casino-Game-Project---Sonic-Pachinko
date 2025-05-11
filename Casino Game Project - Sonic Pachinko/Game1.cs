@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using SharpDX.XInput;
 using System;
 using System.Collections.Generic;
@@ -142,7 +144,30 @@ namespace Casino_Game_Project___Sonic_Pachinko
         List<Rectangle> rightWallBumpers;
         //
 
+        //Box texture for testing purposes
         Texture2D boxTexture;
+        //
+
+        //Sound Effects
+        SoundEffect bumperSFX;
+        SoundEffectInstance bumperInstance;
+
+        SoundEffect springSFX;
+        SoundEffectInstance springInstance;
+
+        SoundEffect loseSFX;
+        SoundEffectInstance loseInstance;
+
+        SoundEffect smallWinSFX;
+        SoundEffectInstance smallWinInstance;
+
+        SoundEffect bigWinSFX;
+        SoundEffectInstance bigWinInstance;
+        //
+
+        //Music
+        Song bgMusic;
+        //
 
         public Game1()
         {
@@ -235,9 +260,9 @@ namespace Casino_Game_Project___Sonic_Pachinko
             //
 
             //Catchers
-            centreCatcherRect = new Rectangle(400, 250, 50, 50);
-            leftCatcherRect = new Rectangle(200, 550, 50, 50);
-            rightCatcherRect = new Rectangle(600, 550, 50, 50);
+            centreCatcherRect = new Rectangle(400, 550, 50, 50);
+            leftCatcherRect = new Rectangle(250, 700, 50, 50);
+            rightCatcherRect = new Rectangle(550, 700, 50, 50);
             //
 
             ballSpeed = new Vector2(0, -10);
@@ -257,6 +282,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             //Row two
             bumpers.Add(new Rectangle(200, 250, 50, 50));
             bumpers.Add(new Rectangle(300, 250, 50, 50));
+            bumpers.Add(new Rectangle(400, 250, 50, 50));
             bumpers.Add(new Rectangle(500, 250, 50, 50));
             bumpers.Add(new Rectangle(600, 250, 50, 50));
             //
@@ -271,17 +297,16 @@ namespace Casino_Game_Project___Sonic_Pachinko
             //
 
             //Row four
+            bumpers.Add(new Rectangle(200, 550, 50, 50));
             bumpers.Add(new Rectangle(300, 550, 50, 50));
-            bumpers.Add(new Rectangle(400, 550, 50, 50));
             bumpers.Add(new Rectangle(500, 550, 50, 50));
+            bumpers.Add(new Rectangle(600, 550, 50, 50));
             //
 
             //Row five
             bumpers.Add(new Rectangle(150, 700, 50, 50));
-            bumpers.Add(new Rectangle(250, 700, 50, 50));
             bumpers.Add(new Rectangle(350, 700, 50, 50));
             bumpers.Add(new Rectangle(450, 700, 50, 50));
-            bumpers.Add(new Rectangle(550, 700, 50, 50));
             bumpers.Add(new Rectangle(650, 700, 50, 50));
             //
             
@@ -303,7 +328,11 @@ namespace Casino_Game_Project___Sonic_Pachinko
             rightBumperHit = false;
             //
 
+            MediaPlayer.Volume = 0.3f;
+
             base.Initialize();
+
+            MediaPlayer.Play(bgMusic);
         }
 
         protected override void LoadContent()
@@ -325,6 +354,23 @@ namespace Casino_Game_Project___Sonic_Pachinko
             floorTexture = Content.Load<Texture2D>("Casino Night Floor");
             catcherTexture = Content.Load<Texture2D>("Casino Night Catcher");
             springTexture = Content.Load<Texture2D>("Casino Night Spring");
+
+            springSFX = Content.Load<SoundEffect>("CNZ Spring Launcher SFX");
+            springInstance = springSFX.CreateInstance();
+
+            bumperSFX = Content.Load<SoundEffect>("Bumper SFX");
+            bumperInstance = bumperSFX.CreateInstance();
+
+            loseSFX = Content.Load<SoundEffect>("CNZ Pinball Flipper SFX");
+            loseInstance = loseSFX.CreateInstance();
+
+            smallWinSFX = Content.Load<SoundEffect>("Casino Slot SFX");
+            smallWinInstance = smallWinSFX.CreateInstance();
+
+            bigWinSFX = Content.Load<SoundEffect>("Score Tally Total SFX");
+            bigWinInstance = bigWinSFX.CreateInstance();
+
+            bgMusic = Content.Load<Song>("Casino Night Zone - Sonic the Hedgehog 2 [OST]");
         }
 
         protected override void Update(GameTime gameTime)
@@ -338,6 +384,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
             // TODO: Add your update logic here
 
             Window.Title = "Sonic Pachinko";
+            MediaPlayer.Volume = 0.3f;
+            MediaPlayer.IsRepeating = true;
 
             if (currentScreen == Screen.WaitScreen)
             {
@@ -468,6 +516,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
                                 firstBumper = new Random().Next(1, 7);
                                 springRect.Y = 936;
                                 ballSpeed = new Vector2(0, -10);
+                                springInstance.Play();
 
                                 ballLaunched = true;
                             }
@@ -562,6 +611,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
                                     ballRect.Y = bumper.Y - ballRect.Height - 5;
                                     ballSpeed.Y = -1;
 
+                                    bumperInstance.Play();
+
                                     if (!regBumperHit)
                                     {
                                         ballPostionHolder = new Point(ballRect.X, ballRect.Y);
@@ -609,6 +660,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
                                         ballRect.Y = rightBumper.Top - ballRect.Height - 5;
                                         ballSpeed.Y = -1;
 
+                                        bumperInstance.Play();
+
                                         if (!rightBumperHit)
                                         {
                                             ballPostionHolder = new Point(ballRect.X, ballRect.Y);
@@ -638,6 +691,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
                                     {
                                         ballRect.Y = leftBumper.Top - ballRect.Height - 5;
                                         ballSpeed.Y = -1;
+
+                                        bumperInstance.Play();
 
                                         if (!leftBumperHit)
                                         {
@@ -856,6 +911,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
                             {
                                 ballSpeed = new Vector2(0, 0);
                                 ballRect.Location = new Point(-30, 906);
+                                loseInstance.Play();
                                 launchable = false;
                                 dropStarted = false;
                                 ballLaunched = false;
