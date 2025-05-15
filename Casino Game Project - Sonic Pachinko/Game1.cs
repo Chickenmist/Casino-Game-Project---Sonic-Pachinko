@@ -59,8 +59,6 @@ namespace Casino_Game_Project___Sonic_Pachinko
         bool hitTube;
 
         bool reload;
-
-        float launchTime;
         bool launchable;
 
         //Wall
@@ -98,7 +96,6 @@ namespace Casino_Game_Project___Sonic_Pachinko
         //Right floor curve movement rectangles
         Rectangle floorCurveRightMoveRectOne;
         Rectangle floorCurveRightMoveRectTwo;
-        Rectangle floorCurveRightMoveRectThree;
         //
 
         //Tube
@@ -111,6 +108,13 @@ namespace Casino_Game_Project___Sonic_Pachinko
         Rectangle centreCatcherRect;
         Rectangle leftCatcherRect;
         Rectangle rightCatcherRect;
+        //
+
+        //Catcher background
+        Texture2D jackPotTexture;
+        Rectangle jackPotRectA;
+        Rectangle jackPotRectB;
+        Rectangle jackPotRectC;
         //
 
         //Spring
@@ -198,8 +202,6 @@ namespace Casino_Game_Project___Sonic_Pachinko
             fromTop = true;
             rollStarted = false;
 
-            launchTime = 0;
-
             wallRect = new Rectangle(45, 185, 45, 800);
             
             springRect = new Rectangle(0, 936, 45, 49);
@@ -263,6 +265,12 @@ namespace Casino_Game_Project___Sonic_Pachinko
             centreCatcherRect = new Rectangle(400, 550, 50, 50);
             leftCatcherRect = new Rectangle(250, 700, 50, 50);
             rightCatcherRect = new Rectangle(550, 700, 50, 50);
+            //
+
+            //Catcher backgrounds
+            jackPotRectA = new Rectangle(400, 550, 50, 50);
+            jackPotRectB = new Rectangle(250, 700, 50, 50);
+            jackPotRectC = new Rectangle(550, 700, 50, 50);
             //
 
             ballSpeed = new Vector2(0, -10);
@@ -339,7 +347,6 @@ namespace Casino_Game_Project___Sonic_Pachinko
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
             ballTexture = Content.Load<Texture2D>("Sonic Roll Sprite Sheet");
 
             boxTexture = Content.Load<Texture2D>("rectangle");
@@ -354,6 +361,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             floorTexture = Content.Load<Texture2D>("Casino Night Floor");
             catcherTexture = Content.Load<Texture2D>("Casino Night Catcher");
             springTexture = Content.Load<Texture2D>("Casino Night Spring");
+            jackPotTexture = Content.Load<Texture2D>("Jackpot");
 
             springSFX = Content.Load<SoundEffect>("CNZ Spring Launcher SFX");
             springInstance = springSFX.CreateInstance();
@@ -381,8 +389,6 @@ namespace Casino_Game_Project___Sonic_Pachinko
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
             Window.Title = "Sonic Pachinko";
             MediaPlayer.Volume = 0.3f;
             MediaPlayer.IsRepeating = true;
@@ -390,6 +396,25 @@ namespace Casino_Game_Project___Sonic_Pachinko
             if (currentScreen == Screen.WaitScreen)
             {
                 Window.Title = "Sonic Pachinko - Bet to Play";
+                
+                if (reload)
+                {
+                    ballSpeed.X = 0.5f;
+
+                    ballRect.Offset(ballSpeed);
+
+                    if (ballRect.X < 0)
+                    {
+                        ballRect.X += 1;
+                    }
+                    else if (ballRect.X >= 0)
+                    {
+                        ballSpeed.X = 0;
+                        ballRect.X = 0;
+                        remainingBalls--;
+                        reload = false;
+                    }
+                }
 
                 //Input bets
                 if (keyboardState.IsKeyDown(Keys.D1) || keyboardState.IsKeyDown(Keys.NumPad1)) //Bet 1
@@ -997,7 +1022,11 @@ namespace Casino_Game_Project___Sonic_Pachinko
             _spriteBatch.Draw(springTexture, springRect, Color.White);
 
             _spriteBatch.Draw(ballTexture, ballRect, frameRect, Color.White);
-            
+
+            _spriteBatch.Draw(jackPotTexture, jackPotRectA, Color.White);
+            _spriteBatch.Draw(jackPotTexture, jackPotRectB, Color.White);
+            _spriteBatch.Draw(jackPotTexture, jackPotRectC, Color.White);
+
             _spriteBatch.Draw(catcherTexture, centreCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, leftCatcherRect, Color.White);
             _spriteBatch.Draw(catcherTexture, rightCatcherRect, Color.White);
