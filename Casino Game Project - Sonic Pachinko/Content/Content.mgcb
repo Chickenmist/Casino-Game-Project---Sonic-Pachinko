@@ -211,6 +211,18 @@
 /processorParam:TextureFormat=Color
 /build:Jackpot.png
 
+#begin Pachinko Backdrop.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Pachinko Backdrop.png
+
 #begin rectangle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -228,6 +240,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Score Tally Total SFX.wav
+
+#begin Slot Roll.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Slot Roll.png
 
 #begin Sonic Roll Sprite Sheet.png
 /importer:TextureImporter

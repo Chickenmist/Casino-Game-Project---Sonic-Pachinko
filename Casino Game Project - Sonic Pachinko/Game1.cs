@@ -69,6 +69,18 @@ namespace Casino_Game_Project___Sonic_Pachinko
         //Background
         Texture2D backgroundTexture;
         Rectangle backgroundRect;
+
+        Texture2D backdropTexture;
+        Rectangle backdropRect;
+
+        Texture2D slotRollTexture;
+        Rectangle slotARect;
+        Rectangle slotBRect;
+        Rectangle slotCRect;
+        Rectangle slotAFrame;
+        Rectangle slotBFrame;
+        Rectangle slotCFrame;
+        float slotTimer;
         //
 
         //Curve
@@ -208,6 +220,8 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
             backgroundRect = new Rectangle(0, 0, 800, 985);
 
+            backdropRect = new Rectangle(90, 40, 670, 840);
+
             roofCurveLeftRect = new Rectangle(-1, 0, 130, 160);
 
             //Left roof curve movement rectangles
@@ -336,6 +350,18 @@ namespace Casino_Game_Project___Sonic_Pachinko
             rightBumperHit = false;
             //
 
+            //Slot Roll
+            slotARect = new Rectangle(333, 622, 60, 83);
+            slotBRect = new Rectangle(393, 622, 60, 83);
+            slotCRect = new Rectangle(453, 622, 60, 83);
+
+            slotAFrame = new Rectangle(0, 0, 32, 96);
+            slotBFrame = new Rectangle(0, 0, 32, 96);
+            slotCFrame = new Rectangle(0, 0, 32, 96);
+
+            slotTimer = 0;
+            //
+
             MediaPlayer.Volume = 0.3f;
 
             base.Initialize();
@@ -352,6 +378,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             boxTexture = Content.Load<Texture2D>("rectangle");
 
             backgroundTexture = Content.Load<Texture2D>("Casino Night Zone BG3");
+            backdropTexture = Content.Load<Texture2D>("Pachinko Backdrop");
             wallTexture = Content.Load<Texture2D>("Casino Night Wall");
             curveTexture = Content.Load<Texture2D>("Casino Night Curve");
             bottomCurveTexture = Content.Load<Texture2D>("Casino Night Curve Bottom");
@@ -362,6 +389,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             catcherTexture = Content.Load<Texture2D>("Casino Night Catcher");
             springTexture = Content.Load<Texture2D>("Casino Night Spring");
             jackPotTexture = Content.Load<Texture2D>("Jackpot");
+            slotRollTexture = Content.Load<Texture2D>("Slot Roll");
 
             springSFX = Content.Load<SoundEffect>("CNZ Spring Launcher SFX");
             springInstance = springSFX.CreateInstance();
@@ -389,13 +417,13 @@ namespace Casino_Game_Project___Sonic_Pachinko
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            Window.Title = "Sonic Pachinko";
+            Window.Title = mouseState.Position.ToString();
             MediaPlayer.Volume = 0.3f;
             MediaPlayer.IsRepeating = true;
 
             if (currentScreen == Screen.WaitScreen)
             {
-                Window.Title = "Sonic Pachinko - Bet to Play";
+                //Window.Title = "Sonic Pachinko - Bet to Play";
                 
                 if (reload)
                 {
@@ -470,7 +498,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             }
             else 
             {
-                Window.Title = "Sonic Pachinko";
+                //Window.Title = "Sonic Pachinko";
 
                 if (remainingBalls > 0)
                 {
@@ -958,6 +986,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
             }
 
             spriteTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            slotTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             AnimateFrame();
 
             base.Update(gameTime);
@@ -965,6 +994,7 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
         private void AnimateFrame()
         {
+            //Ball Spin
             if(spriteFrame == 1)
             {
                 frameRect = new Rectangle(0, 0, 27, 30);
@@ -995,6 +1025,34 @@ namespace Casino_Game_Project___Sonic_Pachinko
 
                 spriteTime = 0;
             }
+            //
+
+            slotAFrame.Y += 8;
+
+            if(slotAFrame.Bottom >= 352)
+            {
+                slotAFrame.Y = 0;
+            }
+
+            if(slotTimer >= 3)
+            {
+                slotBFrame.Y += 8;
+
+                if (slotBFrame.Bottom >= 352)
+                {
+                    slotBFrame.Y = 0;
+                }
+            }
+
+            if(slotTimer >= 7)
+            {
+                slotCFrame.Y += 8;
+
+                if (slotCFrame.Bottom >= 352)
+                {
+                    slotCFrame.Y = 0;
+                }
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -1004,7 +1062,12 @@ namespace Casino_Game_Project___Sonic_Pachinko
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             
-            _spriteBatch.Draw(backgroundTexture, backgroundRect, Color.White);
+            _spriteBatch.Draw(backgroundTexture, backgroundRect, Color.White);            
+            
+            _spriteBatch.Draw(slotRollTexture, slotARect, slotAFrame, Color.White);
+            _spriteBatch.Draw(slotRollTexture, slotBRect, slotBFrame, Color.White);
+            _spriteBatch.Draw(slotRollTexture, slotCRect, slotCFrame, Color.White);
+            _spriteBatch.Draw(backdropTexture, backdropRect, Color.White);
 
             _spriteBatch.Draw(wallTexture, wallRect, Color.White);
 
